@@ -1,4 +1,8 @@
-"""Translated cleanup and visibility routines from Module4.bas."""
+"""Cleanup and visibility routines translated from the original VBA Module4.
+
+This module centralizes protection toggles, hiding/showing report sections,
+and file save helpers for Excel and OpenOffice environments.
+"""
 
 from __future__ import annotations
 
@@ -13,9 +17,11 @@ LPWORD = "KCoE"
 
 
 def cleanupsub(app: Any, workbook: Any, nomsg: bool) -> None:
+    """Re-protect sheets, save the workbook, and optionally notify the user."""
     app.DisplayAlerts = False
     app.StatusBar = "Resetting locks... "
 
+    # Protect all worksheets and re-apply workbook-level protection.
     for sheet in workbook.Worksheets:
         sheet.Protect(PWORD)
 
@@ -25,6 +31,7 @@ def cleanupsub(app: Any, workbook: Any, nomsg: bool) -> None:
     if not workbook.ProtectStructure:
         workbook.Protect(PWORD)
 
+    # Save the workbook under the current name.
     mysavefile(app, workbook, workbook.Name)
 
     if not nomsg:
@@ -38,6 +45,7 @@ def cleanupsub(app: Any, workbook: Any, nomsg: bool) -> None:
 
 
 def delete_unused(workbook: Any) -> None:
+    """Trim unused rows/columns on every worksheet."""
     for wks in workbook.Worksheets:
         wks.UsedRange
         try:
@@ -64,11 +72,13 @@ def delete_unused(workbook: Any) -> None:
         if last_row * last_col == 0:
             wks.Columns.Delete()
         else:
+            # Remove trailing rows and columns past the last used cell.
             wks.Range(wks.Cells(last_row + 1, 1), wks.Cells(wks.Rows.Count, 1)).EntireRow.Delete()
             wks.Range(wks.Cells(1, last_col + 1), wks.Cells(1, wks.Columns.Count)).EntireColumn.Delete()
 
 
 def showstuff(workbook: Any) -> None:
+    """Expose hidden columns/rows and unlock control cells."""
     for sheet in workbook.Worksheets:
         sheet.Unprotect(PWORD)
         sheet.Columns("P:T").Hidden = False
@@ -79,6 +89,7 @@ def showstuff(workbook: Any) -> None:
 
 
 def hidestuff(workbook: Any) -> None:
+    """Hide columns/rows based on report size and relock control cells."""
     for sheet in workbook.Worksheets:
         sheet.Unprotect(PWORD)
         if not (sheet.Name == "Contents" and sheet.Name == "Free Form"):
@@ -116,6 +127,7 @@ def hidestuff(workbook: Any) -> None:
 
 
 def mycopyfile(app: Any, workbook: Any, saveasname: str) -> None:
+    """Save a copy of the workbook under a new name."""
     app.DisplayAlerts = False
     app.StatusBar = f"Saving to new file {saveasname}"
     workbook.SaveCopyAs(f"{workbook.Path}\\{saveasname}")
@@ -123,6 +135,7 @@ def mycopyfile(app: Any, workbook: Any, saveasname: str) -> None:
 
 
 def mysavefile(app: Any, workbook: Any, newsavename: str) -> None:
+    """Save the workbook, falling back to OpenOffice save if needed."""
     app.DisplayAlerts = False
     saveasname = Module3.sanitize(newsavename)
     app.StatusBar = f"Saving to new file {saveasname}"
@@ -134,6 +147,7 @@ def mysavefile(app: Any, workbook: Any, newsavename: str) -> None:
 
 
 def saveOO(workbook: Any, saveasname: str) -> None:
+    """Save a workbook through the OpenOffice API."""
     o_doc = workbook
 
     if o_doc.hasLocation:

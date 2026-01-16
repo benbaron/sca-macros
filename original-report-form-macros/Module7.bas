@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module7"
+'=========================================================================
+' Module: Module7 (Local template creation)
+' Purpose: Create unlocked local report copies from the master workbook.
+' Key routines: createlocalversions, finishsetup
+'=========================================================================
 ' routines to save local versions from master version
 '
 'Password to unhide sheets
@@ -579,5 +584,4 @@ mysavefile (nworkbookname)
 
 ActiveWorkbook.Close
 End Sub
-
 

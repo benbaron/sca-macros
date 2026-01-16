@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module3"
+'=========================================================================
+' Module: Module3 (Report import/migration)
+' Purpose: Import data from another report workbook (v2/v3) into current.
+' Key routines: importFromReport, importPage, importOldtoNew
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "SCoE"
 Const LpWord = "KCoE"
@@ -881,7 +886,6 @@ Function inArray(myRay, str)
         End If
     Next tst
 End Function
-
 
 
 

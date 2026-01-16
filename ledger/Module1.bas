@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module1"
+'=========================================================================
+' Module: Module1 (Ledger file utilities)
+' Purpose: Provide file picker and save helpers for Excel/OpenOffice paths.
+' Key routines: myGetFile, GetFile, myCopyFile, mySaveFile, saveOO, sanitize
+'=========================================================================
 
 '*******************************************************
 '  Function myGetFile returns either a path & file name

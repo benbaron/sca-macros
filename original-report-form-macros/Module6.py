@@ -1,4 +1,8 @@
-"""Translated test data routines from Module6.bas."""
+"""Test data routines translated from the original VBA Module6.
+
+This module clears report data for reuse and can also populate sheets with
+sample values for testing.
+"""
 
 from __future__ import annotations
 
@@ -13,6 +17,7 @@ LPWORD = "KCoE"
 
 
 def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
+    """Clear report data or populate with test data based on `clearme`."""
     thisversion = workbook.Sheets("Contents").Range("B39")
     if workbook.Sheets("Contents").Range("B40") == "MASTER":
         thisversion = "MASTER"
@@ -20,6 +25,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
     app.ScreenUpdating = False
     app.DisplayStatusBar = True
 
+    # Offer to save a copy before clearing or messing up data.
     msg = (
         "Do you want to save this cleared report workbook to a new file?"
         if clearme
@@ -34,8 +40,10 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
         )
         Module4.mysavefile(app, workbook, saveasname)
 
+    # Lock and hide sheets to ensure a consistent starting point.
     Module4.hidestuff(workbook)
 
+    # Apply header defaults for either a cleared or "messed up" dataset.
     if clearme:
         workbook.Sheets("Contents").Range("C8:C11").ClearContents()
         workbook.Sheets("Contents").Range("C12") = 1
@@ -48,6 +56,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
         sheet.Range("C12") = 4
         sheet.Range("C15") = "Corporate"
 
+    # Clear or populate the contact info page.
     app.StatusBar = "Contact Info..."
     if clearme:
         sheet = workbook.Sheets("CONTACT_INFO_1")
@@ -66,6 +75,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
         sheet.Range("e29,D30,D31,D32:D33") = 1
         sheet.Range("F32,F33,H32,D34:D35,H34:H35") = 1
 
+    # Clear or populate the primary account page.
     app.StatusBar = "Primary Account..."
     if clearme:
         sheet = workbook.Sheets("PRIMARY_ACCOUNT_2a")
@@ -82,6 +92,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
         sheet.Range("F38") = "Yes"
         sheet.Range("h40,C44:h53") = 1
 
+    # Clear or populate the secondary accounts pages.
     app.StatusBar = "Secondary Accounts..."
     if clearme:
         workbook.Sheets("SECONDARY_ACCOUNTS_2b").Range("D13:g21,D25:g25,D27:g44").ClearContents()
@@ -106,6 +117,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
                 workbook.Sheets(name).Range("D17:g17") = "No"
                 workbook.Sheets(name).Range("D15:g15") = workbook.Sheets(name).Range("C47")
 
+    # Reset or populate balance sheet values.
     workbook.Sheets("BALANCE_3").Range("g19:g20").ClearContents()
     if clearme:
         if thisversion in {"MEDIUM", "LARGE", "MASTER"}:
@@ -115,6 +127,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
         if thisversion in {"MEDIUM", "LARGE", "MASTER"}:
             workbook.Sheets("BALANCE_3").Range("g31") = 1
 
+    # Clear or populate asset, inventory, regalia, and depreciation pages.
     app.StatusBar = "Cash Assets..."
     if clearme:
         workbook.Sheets("ASSET_DTL_5a").Range("c15:g18,c24:g34,c41:g45,c52:g59").ClearContents()
@@ -169,6 +182,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
                 workbook.Sheets("DEPR_DTL_8c").Range("e14:g53") = 1
                 workbook.Sheets("DEPR_DTL_8c").Range("j14:j53") = 1
 
+    # Apply income/expense data after other sheet sections are handled.
     MessIncomeExpense(workbook, thisversion) if not clearme else ClearIncomeExpense(workbook, thisversion)
 
     if not nomsg:
@@ -176,6 +190,7 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
 
 
 def MessIncomeExpense(workbook: Any, thisvers: str) -> None:
+    """Populate income/expense-related sheets with sample data."""
     if thisvers in {"SMALL", "MEDIUM", "LARGE", "MASTER"}:
         workbook.Sheets("TRANSFER_IN_9").Range("c13:f57") = 1
         workbook.Sheets("TRANSFER_OUT_10").Range("c11:f50") = 1

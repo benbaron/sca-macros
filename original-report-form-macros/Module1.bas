@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module1"
+'=========================================================================
+' Module: Module1 (Report printing)
+' Purpose: Print required report pages in forward/reverse order or short sets.
+' Key routines: PrintBackwards, PrintForwards, PrintFour, fillPage
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "SCoE"
 Const LpWord = "KCoE"
@@ -165,7 +170,6 @@ fillPage = Array("Contents", "CONTACT_INFO_1", _
     "TRANSFER_OUT_10b", "TRANSFER_OUT_10c", "TRANSFER_OUT_10d", "EXPENSE_DTL_12c", "FreeForm")
 
 End Function
-
 
 
 

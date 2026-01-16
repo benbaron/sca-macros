@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module6"
+'=========================================================================
+' Module: Module6 (Ledger import)
+' Purpose: Import data from another ledger workbook into the current ledger.
+' Key routines: importFromLedger
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 Public MyChng As String
@@ -368,5 +373,4 @@ Dim blankDateCount As Integer
         .Range("x11:ag110") = srcWB.Sheets(sSheetName).Range("x11:ag110").Value
     End With
 End Sub
-
 

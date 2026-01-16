@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module7"
+'=========================================================================
+' Module: Module7 (Account maintenance)
+' Purpose: Add, edit, delete, and reflow summary account rows.
+' Key routines: addAccount, deleteAccount, editAccount
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 
@@ -419,6 +424,5 @@ Sub scrunchAccounts(row)
     Sheets("Signatories").Protect (pWord)
     Application.ScreenUpdating = True
 End Sub
-
 
 

@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module2"
+'=========================================================================
+' Module: Module2 (Ledger printing)
+' Purpose: Print ledger sheets and related reports by quarter or full set.
+' Key routines: PrintAll, PrintFirstQuarter, PrintSecondQuarter, PrintLedger
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 Sub PrintAll()
@@ -364,6 +369,5 @@ Sub PrintSignatories()
     ActiveSheet.PageSetup.PrintArea = "$b$2:$s$84"
 
 End Sub
-
 
 

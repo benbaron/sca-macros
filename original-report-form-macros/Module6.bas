@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module6"
+'=========================================================================
+' Module: Module6 (Test data)
+' Purpose: Clear report data or populate sheets with sample/test values.
+' Key routines: ClearReport, MessIncomeExpense, ClearIncomeExpense
+'=========================================================================
 ' routines to clear test data and create test data
 '
 'Password to unhide sheets
@@ -473,4 +478,3 @@ End Sub
 Sub unmessreport()
 ClearReport True, False
 End Sub
-

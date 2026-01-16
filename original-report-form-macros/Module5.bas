@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module5"
+'=========================================================================
+' Module: Module5 (Quarter reset)
+' Purpose: Reset report workbook for the next quarter/year.
+' Key routines: ResetReport
+'=========================================================================
 ' routines to reset report for next reporting year
 '
 'Password to unhide sheets

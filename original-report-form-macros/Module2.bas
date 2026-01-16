@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module2"
+'=========================================================================
+' Module: Module2 (Ledger import into report)
+' Purpose: Import ledger data into the report workbook with validation.
+' Key routines: importfromledger, import_ledger_pages
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "SCoE"
 Const LpWord = "KCoE"
@@ -1493,5 +1498,4 @@ End If
     doIt = False
 Next j
 End Sub
-
 

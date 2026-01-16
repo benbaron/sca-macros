@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module4"
+'=========================================================================
+' Module: Module4 (Income/Expense report generation)
+' Purpose: Build sub-ledger reports per income/expense category.
+' Key routines: CreateReportIncExp
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 Sub CreateReportIncExp()
@@ -316,6 +321,5 @@ If response = vbOK Then
 End If ' response
 
 End Sub
-
 
 

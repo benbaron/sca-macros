@@ -45,4 +45,5 @@ def msg_box(message: str, style: int, title: str) -> int:
 
 
 def in_array(values: Iterable[Any], target: Any) -> bool:
+    """Return True when `target` exists in the provided iterable."""
     return any(item == target for item in values)
