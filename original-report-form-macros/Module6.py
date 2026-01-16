@@ -50,37 +50,37 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
 
     app.StatusBar = "Contact Info..."
     if clearme:
-        with workbook.Sheets("CONTACT_INFO_1") as sheet:
-            sheet.Range("D10:h10,D12:h12,D13:D14,F13,F14:h14,H13").ClearContents()
-            sheet.Range("D15:f16,H15:H16,D18:h18,D19,f19,h19").ClearContents()
-            sheet.Range("e21:h21,D22:h23,D24:D25,F24,F25:h25,H24").ClearContents()
-            sheet.Range("D26:f27,H26:H27").ClearContents()
-            sheet.Range("e29:H29,D30:h31,D32:d33,F32,F33:h33,H32").ClearContents()
-            sheet.Range("D34:f35,H34:H35").ClearContents()
+        sheet = workbook.Sheets("CONTACT_INFO_1")
+        sheet.Range("D10:h10,D12:h12,D13:D14,F13,F14:h14,H13").ClearContents()
+        sheet.Range("D15:f16,H15:H16,D18:h18,D19,f19,h19").ClearContents()
+        sheet.Range("e21:h21,D22:h23,D24:D25,F24,F25:h25,H24").ClearContents()
+        sheet.Range("D26:f27,H26:H27").ClearContents()
+        sheet.Range("e29:H29,D30:h31,D32:d33,F32,F33:h33,H32").ClearContents()
+        sheet.Range("D34:f35,H34:H35").ClearContents()
     else:
-        with workbook.Sheets("CONTACT_INFO_1") as sheet:
-            sheet.Range("D10,D12,D13:D14,F13,F14,H13,D15:D16,H15:H16") = 1
-            sheet.Range("D18,D19,f19,h19") = 1
-            sheet.Range("e21,D22,D23,D24:D25") = 1
-            sheet.Range("F24,F25,H24,D26:D27,H26:H27") = 1
-            sheet.Range("e29,D30,D31,D32:D33") = 1
-            sheet.Range("F32,F33,H32,D34:D35,H34:H35") = 1
+        sheet = workbook.Sheets("CONTACT_INFO_1")
+        sheet.Range("D10,D12,D13:D14,F13,F14,H13,D15:D16,H15:H16") = 1
+        sheet.Range("D18,D19,f19,h19") = 1
+        sheet.Range("e21,D22,D23,D24:D25") = 1
+        sheet.Range("F24,F25,H24,D26:D27,H26:H27") = 1
+        sheet.Range("e29,D30,D31,D32:D33") = 1
+        sheet.Range("F32,F33,H32,D34:D35,H34:H35") = 1
 
     app.StatusBar = "Primary Account..."
     if clearme:
-        with workbook.Sheets("PRIMARY_ACCOUNT_2a") as sheet:
-            sheet.Range("E13:h14,E15:E16,h16,F17:h17").ClearContents()
-            sheet.Range("H15").Value = sheet.Range("C59").Value
-            sheet.Range("h16,h19,C21:h23,C27:h34,h37,F38").ClearContents()
-            sheet.Range("F38") = "No"
-            sheet.Range("h40,C44:h53").ClearContents()
+        sheet = workbook.Sheets("PRIMARY_ACCOUNT_2a")
+        sheet.Range("E13:h14,E15:E16,h16,F17:h17").ClearContents()
+        sheet.Range("H15").Value = sheet.Range("C59").Value
+        sheet.Range("h16,h19,C21:h23,C27:h34,h37,F38").ClearContents()
+        sheet.Range("F38") = "No"
+        sheet.Range("h40,C44:h53").ClearContents()
     else:
-        with workbook.Sheets("PRIMARY_ACCOUNT_2a") as sheet:
-            sheet.Range("E13:E14,E15:E16,h16,F17") = 1
-            sheet.Range("H15").Value = sheet.Range("C59").Value
-            sheet.Range("h16,h19,C21:h23,C27:h34,h37") = 1
-            sheet.Range("F38") = "Yes"
-            sheet.Range("h40,C44:h53") = 1
+        sheet = workbook.Sheets("PRIMARY_ACCOUNT_2a")
+        sheet.Range("E13:E14,E15:E16,h16,F17") = 1
+        sheet.Range("H15").Value = sheet.Range("C59").Value
+        sheet.Range("h16,h19,C21:h23,C27:h34,h37") = 1
+        sheet.Range("F38") = "Yes"
+        sheet.Range("h40,C44:h53") = 1
 
     app.StatusBar = "Secondary Accounts..."
     if clearme:
@@ -136,34 +136,34 @@ def ClearReport(app: Any, workbook: Any, clearme: bool, nomsg: bool) -> None:
             workbook.Sheets("ASSET_DTL_5c").Range("c13:f32,c39:f43,c50:f57") = 1
         if thisversion in {"MEDIUM", "LARGE", "MASTER"}:
             app.StatusBar = "Non-cash Assets..."
-            with workbook.Sheets("INVENTORY_DTL_6") as sheet:
+            sheet = workbook.Sheets("INVENTORY_DTL_6")
+            sheet.Range("E14:l14") = 1
+            sheet.Range("E16:l17") = 1
+            sheet.Range("E19:l20") = 1
+            sheet.Range("E24:l25") = 1
+            sheet.Range("E30:l30") = 1
+            sheet = workbook.Sheets("REGALIA_SALES_DTL_7")
+            sheet.Range("C20:H31") = 1
+            sheet.Range("c37:I46") = 1
+            sheet.Range("c49:g51") = 1
+            sheet.Range("i49:I51") = 1
+            sheet = workbook.Sheets("DEPR_DTL_8")
+            sheet.Range("d14:g23") = 1
+            sheet.Range("j14:j23") = 1
+            sheet.Range("e32:g41") = 1
+            sheet.Range("j32:j41") = 1
+            if thisversion in {"LARGE", "MASTER"}:
+                sheet = workbook.Sheets("INVENTORY_DTL_6b")
                 sheet.Range("E14:l14") = 1
                 sheet.Range("E16:l17") = 1
                 sheet.Range("E19:l20") = 1
                 sheet.Range("E24:l25") = 1
                 sheet.Range("E30:l30") = 1
-            with workbook.Sheets("REGALIA_SALES_DTL_7") as sheet:
+                sheet = workbook.Sheets("REGALIA_SALES_DTL_7b")
                 sheet.Range("C20:H31") = 1
                 sheet.Range("c37:I46") = 1
                 sheet.Range("c49:g51") = 1
                 sheet.Range("i49:I51") = 1
-            with workbook.Sheets("DEPR_DTL_8") as sheet:
-                sheet.Range("d14:g23") = 1
-                sheet.Range("j14:j23") = 1
-                sheet.Range("e32:g41") = 1
-                sheet.Range("j32:j41") = 1
-            if thisversion in {"LARGE", "MASTER"}:
-                with workbook.Sheets("INVENTORY_DTL_6b") as sheet:
-                    sheet.Range("E14:l14") = 1
-                    sheet.Range("E16:l17") = 1
-                    sheet.Range("E19:l20") = 1
-                    sheet.Range("E24:l25") = 1
-                    sheet.Range("E30:l30") = 1
-                with workbook.Sheets("REGALIA_SALES_DTL_7b") as sheet:
-                    sheet.Range("C20:H31") = 1
-                    sheet.Range("c37:I46") = 1
-                    sheet.Range("c49:g51") = 1
-                    sheet.Range("i49:I51") = 1
                 workbook.Sheets("DEPR_DTL_8b").Range("d14:g53") = 1
                 workbook.Sheets("DEPR_DTL_8b").Range("j14:j53") = 1
                 workbook.Sheets("DEPR_DTL_8c").Range("e14:g53") = 1

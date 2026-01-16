@@ -96,20 +96,20 @@ def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
     sheet.Range("F7:H27").Locked = False
     sheet.Range("F30:H50").Locked = False
 
-    if sheet.Range("B39") == "SMALL":
+    if sheet.Range("B39").Value == "SMALL":
         sheet.Range("E15:H17").ClearContents()
         sheet.Range("E27:H27").ClearContents()
         sheet.Range("E30:H48").ClearContents()
-        if sheet.Range("C15") == "Corporate":
+        if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
-    elif sheet.Range("B39") == "MEDIUM":
+    elif sheet.Range("B39").Value == "MEDIUM":
         sheet.Range("E30:H43").ClearContents()
         sheet.Range("E45:H48").ClearContents()
-        if sheet.Range("C15") == "Corporate":
+        if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
-    elif sheet.Range("B39") == "LARGE":
+    elif sheet.Range("B39").Value == "LARGE":
         sheet.Range("E33:H38").ClearContents()
-        if sheet.Range("C15") == "Corporate":
+        if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
     else:
         sheet.Range("E15:H17").ClearContents()
@@ -122,20 +122,20 @@ def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
     sheet.Range("F7:H27").Locked = True
     sheet.Range("F30:H50").Locked = True
 
-    if sheet.Range("C15") == "Non-US":
+    if sheet.Range("C15").Value == "Non-US":
         sheet.Range("C61") = "=IF(C59=\"\",\"\",TEXT(DATE(C63,C59,1),\"*dd/mm/yyyy\"))"
         sheet.Range("C62") = "=IF(C60=\"\",\"\",TEXT(DATE(C63,C60,C64),\"*dd/mm/yyyy\"))"
         sheet.Shapes.Range("B_ImportLedger").Delete()
 
     sheet.Select()
     oldtext = "LARGE"
-    newtext = sheet.Range("B39")
+    newtext = sheet.Range("B39").Value
     for hlink in sheet.Hyperlinks:
         if oldtext in hlink.Address:
             hlink.Address = hlink.Address.replace(oldtext, str(newtext))
 
     wb = app.ActiveWorkbook
-    size = sheet.Range("B39")
+    size = sheet.Range("B39").Value
     app.StatusBar = f"Fix Balance Statement..{wb.Name}"
     balance = wb.Sheets("BALANCE_3")
     if size == "SMALL":
@@ -223,7 +223,7 @@ def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
         income.Range("j21").ClearContents()
         income.Range("g30:I30").ClearContents()
         income.Range("h39").ClearContents()
-        if sheet.Range("C15") == "Corporate":
+        if sheet.Range("C15").Value == "Corporate":
             income.Range("j44").Formula = "='EXPENSE_DTL_12b'!I56"
         income.Range("j45").Formula = "='TRANSFER_OUT_10'!F25"
         income.Range("j46").Formula = "='TRANSFER_OUT_10'!F52"
