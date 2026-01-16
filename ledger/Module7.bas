@@ -105,10 +105,10 @@ Dim i As Integer
     'check dupes
     For i = 10 To 22
         If i <> ActiveCell.row Then
-            If Sheets("Summary").Range("C" & ActiveCell.row).Value = newValue Then
+            If Sheets("Summary").Range("C" & i).Value = newValue Then
                 MsgBox (newValue & " is already in use")
                 Exit Sub
-            ElseIf Sheets("Summary").Range("C" & ActiveCell.row).Value = "" Then
+            ElseIf Sheets("Summary").Range("C" & i).Value = "" Then
                 Exit For
             End If
         End If
@@ -222,10 +222,10 @@ Dim i As Integer
     'check dupes
     For i = 10 To 51
         If i <> ActiveCell.row Then
-            If Sheets("Summary").Range("G" & ActiveCell.row).Value = newValue Then
+            If Sheets("Summary").Range("G" & i).Value = newValue Then
                 MsgBox (newValue & " is already in use")
                 Exit Sub
-            ElseIf Sheets("Summary").Range("G" & ActiveCell.row).Value = "" Then
+            ElseIf Sheets("Summary").Range("G" & i).Value = "" Then
                 Exit For
             End If
         End If
@@ -419,7 +419,6 @@ Sub scrunchAccounts(row)
     Sheets("Signatories").Protect (pWord)
     Application.ScreenUpdating = True
 End Sub
-
 
 
 

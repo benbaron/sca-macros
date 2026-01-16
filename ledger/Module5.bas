@@ -808,7 +808,7 @@ If Sheets(sourcesheet).Cells(sourceline, 30 + checkoffset) = targetName And _
       Sheets(targetsheet).Cells(targetline + lineoffset, 9) = Sheets(sourcesheet).Cells(sourceline, 31).Value 'income 4
    Else
       Sheets(targetsheet).Cells(targetline + lineoffset, 9) = Sheets(sourcesheet).Cells(sourceline, 32).Value 'expense 4
-      Sheets(targetsheet).Cells(targetline + lineoffset4, 7) = Sheets(targetsheet).Cells(targetline + 1, 7) * -1
+      Sheets(targetsheet).Cells(targetline + lineoffset, 7) = Sheets(targetsheet).Cells(targetline + lineoffset, 7) * -1
    End If
    Sheets(targetsheet).Cells(targetline + lineoffset, 10) = Sheets(sourcesheet).Cells(sourceline, 33).Value 'fund 4
 End If
@@ -845,6 +845,5 @@ Sheets(targetsheet).Cells(targetline, 32) = Sheets(sourcesheet).Cells(sourceline
 Sheets(targetsheet).Cells(targetline, 33) = Sheets(sourcesheet).Cells(sourceline, 33).Value 'fund 4
 
 End Sub
-
 
 
