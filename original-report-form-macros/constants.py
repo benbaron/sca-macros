@@ -1,0 +1,26 @@
+"""Shared constants used by the translated VBA macros."""
+
+from __future__ import annotations
+
+VB_OK = 1
+VB_CANCEL = 2
+VB_ABORT = 3
+VB_RETRY = 4
+VB_IGNORE = 5
+VB_YES = 6
+VB_NO = 7
+
+VB_OK_ONLY = 0
+VB_OK_CANCEL = 1
+VB_ABORT_RETRY_IGNORE = 2
+VB_YES_NO_CANCEL = 3
+VB_YES_NO = 4
+VB_RETRY_CANCEL = 5
+
+VB_EXCLAMATION = 48
+VB_DEFAULT_BUTTON1 = 0
+
+XL_MANUAL = -4135
+XL_AUTOMATIC = -4105
+
+BLACK = 0x000000
