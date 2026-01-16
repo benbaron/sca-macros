@@ -1,4 +1,8 @@
-"""Translated local version creation routines from Module7.bas."""
+"""Local version creation routines translated from the original VBA Module7.
+
+This module creates a set of unlocked local report templates from the master
+workbook and then applies final setup adjustments per file size/variant.
+"""
 
 from __future__ import annotations
 
@@ -13,8 +17,10 @@ LPWORD = "KCoE"
 
 
 def createlocalversions(app: Any, workbook: Any) -> None:
+    """Create local template copies for each size and variant."""
     Module6.ClearReport(app, workbook, True, True)
 
+    # Confirm before creating a large batch of local files.
     msg = "You are about to create all new local versions!"
     title = "CREATE Local Reports"
     style = VB_OK_CANCEL + VB_EXCLAMATION + VB_DEFAULT_BUTTON1
@@ -26,6 +32,7 @@ def createlocalversions(app: Any, workbook: Any) -> None:
     app.DisplayStatusBar = True
     app.DisplayAlerts = False
 
+    # Temporarily show hidden elements before copying.
     Module4.showstuff(workbook)
 
     workbook.Sheets("Contents").Select()
@@ -72,6 +79,7 @@ def createlocalversions(app: Any, workbook: Any) -> None:
     app.DisplayAlerts = True
     workbook.Save()
 
+    # Apply post-processing tweaks to each newly created workbook.
     finishsetup(app, workbook, largecorp)
     finishsetup(app, workbook, mediumcorp)
     finishsetup(app, workbook, smallcorp)
@@ -85,9 +93,11 @@ def createlocalversions(app: Any, workbook: Any) -> None:
 
 
 def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
+    """Finalize each local workbook by locking ranges and updating formulas."""
     app.Workbooks.Open(f"{workbook.Path}\\{workbookname}")
     app.Workbooks(workbookname).Activate()
 
+    # Ensure all sheets are unprotected for updates.
     for sheet in app.ActiveWorkbook.Worksheets:
         sheet.Unprotect(PWORD)
 
@@ -97,21 +107,25 @@ def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
     sheet.Range("F30:H50").Locked = False
 
     if sheet.Range("B39").Value == "SMALL":
+        # SMALL reports have fewer table-of-contents rows to show.
         sheet.Range("E15:H17").ClearContents()
         sheet.Range("E27:H27").ClearContents()
         sheet.Range("E30:H48").ClearContents()
         if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
     elif sheet.Range("B39").Value == "MEDIUM":
+        # MEDIUM reports have intermediate TOC settings.
         sheet.Range("E30:H43").ClearContents()
         sheet.Range("E45:H48").ClearContents()
         if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
     elif sheet.Range("B39").Value == "LARGE":
+        # LARGE reports keep most TOC entries.
         sheet.Range("E33:H38").ClearContents()
         if sheet.Range("C15").Value == "Corporate":
             sheet.Range("E49:H49").ClearContents()
     else:
+        # PayPal or other variants require special TOC cleanup.
         sheet.Range("E15:H17").ClearContents()
         sheet.Range("E26:H27").ClearContents()
         sheet.Range("E30:H32").ClearContents()
@@ -123,6 +137,7 @@ def finishsetup(app: Any, workbook: Any, workbookname: str) -> None:
     sheet.Range("F30:H50").Locked = True
 
     if sheet.Range("C15").Value == "Non-US":
+        # Non-US variants use different date formats and disable ledger import.
         sheet.Range("C61") = "=IF(C59=\"\",\"\",TEXT(DATE(C63,C59,1),\"*dd/mm/yyyy\"))"
         sheet.Range("C62") = "=IF(C60=\"\",\"\",TEXT(DATE(C63,C60,C64),\"*dd/mm/yyyy\"))"
         sheet.Shapes.Range("B_ImportLedger").Delete()

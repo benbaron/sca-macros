@@ -1,4 +1,8 @@
-"""Translated ledger import routines from Module2.bas."""
+"""Ledger import routines translated from the original VBA Module2.
+
+This module handles importing ledger data into a report workbook, validating
+ledger compatibility, and mapping ledger values into report sheets.
+"""
 
 from __future__ import annotations
 
@@ -21,9 +25,11 @@ LPWORD = "KCoE"
 
 
 def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
+    """Import ledger data into the active report workbook."""
     report_version = workbook.Sheets("Contents").Range("B39")
     report_sub = workbook.Sheets("Contents").Range("C15")
 
+    # Guardrails: PayPal and Non-US forms are not compatible with imports.
     if report_version == "PAYPAL":
         msg_box("This doesn't apply to PAYPAL form.", VB_OK_ONLY, "")
         return
@@ -40,6 +46,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
     if msg_box(msg, style, title) != VB_OK:
         return
 
+    # Determine which quarters can be imported based on report quarter/cumulative mode.
     qtrarray = [False, False, False, False, False]
     quarter_value = workbook.Sheets("Contents").Range("C12").Value
     if quarter_value == 1:
@@ -83,6 +90,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
     reportname = workbook.Name
     workbook.Sheets("Contents").Select()
 
+    # Prompt for ledger file path, then open the source ledger workbook.
     ledgername = Module3.mygetfile(app)
     if str(ledgername).lower() == "false":
         return
@@ -99,6 +107,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
     ledger_wb.Activate()
     badledger = False
 
+    # Verify ledger version for compatibility with the report importer.
     ledger_vers = ledger_wb.Sheets("Contents").Range("F46").Value.split(" ")
     if ledger_vers[-1].startswith("3"):
         lq1 = "Ledger_Q1"
@@ -124,6 +133,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
     for sheet in ledger_wb.Worksheets:
         sheet.Unprotect(LPWORD)
 
+    # Validate branch name, year, and corporate/subsidiary status.
     if (
         workbooks(reportname).Sheets("Contents").Range("C8") != ""
         or workbooks(reportname).Sheets("Contents").Range("C11") > 0
@@ -149,6 +159,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
             badledger = True
             msg_box("Corporate/Subsidiary status does not match. Ending...", VB_OK_ONLY, "")
 
+    # Confirm the ledger fits within the target report size before import.
     app.StatusBar = f"Validating {ledgername} will fit in this report..."
     if not badledger and report_version == "SMALL":
         if workbooks(ledgername).Sheets("Summary").Range("C15").Value != "":
@@ -173,6 +184,7 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
                 msg_box("SMALL form does not have room for newsletters, use MEDIUM form...", VB_OK_ONLY, "")
 
     if not badledger:
+        # Import the ledger pages and restore application settings.
         app.Calculation = -4135
         import_ledger_pages(app, workbook, workbooks, ledgername, qtrarray)
         app.Calculation = -4105
@@ -182,9 +194,11 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
 
 
 def import_ledger_pages(app: Any, workbook: Any, workbooks: Any, ledgername: str, qtrarray: List[bool]) -> None:
+    """Copy ledger values into the report workbook for selected quarters."""
     ledger_wb = workbooks(ledgername)
     app.StatusBar = "Importing data..."
 
+    # Summary data mappings that feed the balance sheet.
     ledger_report_map = [
         ("BALANCE_3", "Summary", "G19", "D8"),
         ("BALANCE_3", "Summary", "G20", "E8"),

@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module5"
+'=========================================================================
+' Module: Module5 (Fund report generation)
+' Purpose: Create sub-fund ledger reports based on summary activity.
+' Key routines: CreateReportFunds, CopyLedgerEntryNarrow
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 
@@ -845,5 +850,4 @@ Sheets(targetsheet).Cells(targetline, 32) = Sheets(sourcesheet).Cells(sourceline
 Sheets(targetsheet).Cells(targetline, 33) = Sheets(sourcesheet).Cells(sourceline, 33).Value 'fund 4
 
 End Sub
-
 

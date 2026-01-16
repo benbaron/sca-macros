@@ -1,4 +1,8 @@
-"""Translated import utilities from Module3.bas."""
+"""Report import utilities translated from the original VBA Module3.
+
+This module handles importing data from other report workbooks, including
+cross-version migrations, sheet-by-sheet transfers, and OpenOffice handling.
+"""
 
 from __future__ import annotations
 
@@ -25,8 +29,10 @@ isOO = False
 
 
 def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
+    """Import data from another report workbook into the active workbook."""
     global tgtWB, srcWB, isOO
 
+    # Capture open workbook names so the new import workbook can be identified.
     open_wbs: List[str] = ["" for _ in range(workbooks.Count + 1)]
     idx = 1
     for wb in workbooks:
@@ -35,6 +41,7 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
 
     isOO = False
 
+    # PayPal forms do not support report imports.
     if active_workbook.Sheets("Contents").Range("B39") == "PAYPAL":
         msg_box("This doesn't apply to PAYPAL form", VB_OK_ONLY, "")
         return
@@ -54,6 +61,7 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
     tgt_name = active_workbook.Name
     active_workbook.Sheets("Contents").Select()
 
+    # Prompt for source report file and open it as read-only.
     src_name = mygetfile(app)
     if str(src_name).lower() == "false":
         return
@@ -69,6 +77,7 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
         if tst == tgt_name:
             tgtWB = wb
 
+    # Ensure both source and target workbooks are resolved.
     if srcWB is None or tgtWB is None:
         msg_box("Unable to resolve source or target workbook.", VB_OK_ONLY, "")
         return
@@ -102,11 +111,13 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
     app.Calculation = XL_MANUAL
 
     if src_version == 3:
+        # Version 3 supports same-sheet-name imports via a generic page copy.
         tgt_sheets = [tgtWB.Sheets(i + 1).Name for i in range(tgtWB.Sheets.Count)]
         src_sheets = [srcWB.Sheets(i + 1).Name for i in range(srcWB.Sheets.Count)]
         for rpt_page in tgt_sheets:
             importPage(rpt_page, not in_array_helper(src_sheets, rpt_page))
     else:
+        # Version 2 requires explicit mapping logic into Version 3 layouts.
         importOldtoNew("Contents", "Contents", 8, 13, "C", 1, -3, False)
         tgtWB.Sheets("Contents").Range("C14") = "USD $"
         importOldtoNew("CONTACT_INFO_1", "CONTACT INFO 4", 10, 35, "D", 5, -1, False)
@@ -136,6 +147,7 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
         importOldtoNew("FINANCE_COMM_13", "FINANCE COMM 13", 11, 54, "C", 4, -1, False)
         importOldtoNew("COMMENTS", "COMMENTS", 8, 32, "C", 1, -1, False)
 
+    # Copy the Free Form page unless running in OpenOffice.
     if not isOO:
         doFreeForm()
     else:
@@ -147,6 +159,7 @@ def importFromReport(app: Any, workbooks: Any, active_workbook: Any) -> None:
     srcWB.Saved = True
     srcWB.Close()
 
+    # Build a new file name based on branch/year/quarter metadata.
     new_name = tgtWB.Sheets("Contents").Range("C8")
     if new_name == "":
         new_name = "Unnamed Branch"

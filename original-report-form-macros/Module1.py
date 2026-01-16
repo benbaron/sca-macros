@@ -1,4 +1,10 @@
-"""Translated printing routines from Module1.bas."""
+"""Printing utilities translated from the original VBA Module1.
+
+This module centralizes report printing flows:
+- counting and filtering printable pages from the Contents sheet
+- printing in either forward or reverse order
+- printing compact "four page" packs for quick review
+"""
 
 from __future__ import annotations
 
@@ -12,12 +18,14 @@ LPWORD = "KCoE"
 
 
 def print_backwards(app: Any, workbook: Any) -> None:
+    """Print required report sheets in reverse order."""
     pages = fill_page()
     app.ScreenUpdating = False
     app.DisplayStatusBar = True
     app.StatusBar = "Printing Backwards..."
 
     count = 0
+    # Identify required pages and mark non-required ones to skip.
     for idx in range(len(pages)):
         if workbook.Sheets("Contents").Cells(idx + 7, 7).Value == "REQUIRED":
             count += 1
@@ -29,11 +37,13 @@ def print_backwards(app: Any, workbook: Any) -> None:
     style = VB_OK_CANCEL + VB_EXCLAMATION + VB_DEFAULT_BUTTON1
     response = msg_box(msg, style, title)
     if response == VB_OK:
+        # Iterate backwards through the list so sheets print in reverse order.
         for idx in range(len(pages) - 1, -1, -1):
             if pages[idx] != "noprint":
                 workbook.Sheets(pages[idx]).Select()
                 workbook.Sheets(pages[idx]).PrintOut()
 
+    # Restore the UI state and notify the user.
     workbook.Sheets("Contents").Select()
     app.ScreenUpdating = True
     app.DisplayStatusBar = False
@@ -41,12 +51,14 @@ def print_backwards(app: Any, workbook: Any) -> None:
 
 
 def print_forwards(app: Any, workbook: Any) -> None:
+    """Print required report sheets in forward order."""
     pages = fill_page()
     app.ScreenUpdating = False
     app.DisplayStatusBar = True
     app.StatusBar = "Printing Forwards..."
 
     count = 0
+    # Identify required pages and mark non-required ones to skip.
     for idx in range(len(pages)):
         if workbook.Sheets("Contents").Cells(idx + 7, 7).Value == "REQUIRED":
             count += 1
@@ -58,11 +70,13 @@ def print_forwards(app: Any, workbook: Any) -> None:
     style = VB_OK_CANCEL + VB_EXCLAMATION + VB_DEFAULT_BUTTON1
     response = msg_box(msg, style, title)
     if response == VB_OK:
+        # Iterate in normal order to print pages from front to back.
         for idx in range(len(pages)):
             if pages[idx] != "noprint":
                 workbook.Sheets(pages[idx]).Select()
                 workbook.Sheets(pages[idx]).PrintOut()
 
+    # Restore the UI state and notify the user.
     workbook.Sheets("Contents").Select()
     app.ScreenUpdating = True
     app.DisplayStatusBar = False
@@ -70,6 +84,7 @@ def print_forwards(app: Any, workbook: Any) -> None:
 
 
 def print_four(app: Any, workbook: Any) -> None:
+    """Print a condensed set of common report pages."""
     pages: List[str] = [
         "Contents",
         "CONTACT_INFO_1",
@@ -85,6 +100,7 @@ def print_four(app: Any, workbook: Any) -> None:
     app.DisplayStatusBar = True
     app.StatusBar = "Printing Forwards..."
 
+    # Adjust secondary account pages based on form size and requirements.
     for idx in range(3, 6):
         if pages[idx] == "SECONDARY_ACCOUNTS_2c" and workbook.Sheets("Contents").Range("B39") == "LARGE":
             if workbook.Sheets("Contents").Range("G29").Value == "REQUIRED":
@@ -108,11 +124,13 @@ def print_four(app: Any, workbook: Any) -> None:
     style = VB_OK_CANCEL + VB_EXCLAMATION + VB_DEFAULT_BUTTON1
     response = msg_box(msg, style, title)
     if response == VB_OK:
+        # Print the selected short list of pages.
         for idx in range(len(pages)):
             if pages[idx] != "noprint":
                 workbook.Sheets(pages[idx]).Select()
                 workbook.Sheets(pages[idx]).PrintOut()
 
+    # Restore the UI state and notify the user.
     workbook.Sheets("Contents").Select()
     app.ScreenUpdating = True
     app.DisplayStatusBar = False
@@ -120,6 +138,7 @@ def print_four(app: Any, workbook: Any) -> None:
 
 
 def fill_page() -> List[str]:
+    """Return the ordered list of report sheets used for printing."""
     return [
         "Contents",
         "CONTACT_INFO_1",

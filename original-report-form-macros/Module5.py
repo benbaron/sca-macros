@@ -1,4 +1,8 @@
-"""Translated report reset routine from Module5.bas."""
+"""Report reset routine translated from the original VBA Module5.
+
+This module clears and rolls forward report data for the next quarter,
+handling year increments, balance carry-forwards, and per-sheet cleanup.
+"""
 
 from __future__ import annotations
 
@@ -13,6 +17,7 @@ LPWORD = "KCoE"
 
 
 def ResetReport(app: Any, workbook: Any) -> None:
+    """Reset the report workbook for the next quarter/year."""
     thisversion = workbook.Sheets("Contents").Range("B39")
     msg = "You are about to reset the entire report workbook for a new quarter!"
     title = "RESET Report"
@@ -24,6 +29,7 @@ def ResetReport(app: Any, workbook: Any) -> None:
     app.ScreenUpdating = False
     app.DisplayStatusBar = True
 
+    # Optionally save the reset workbook under a new name.
     msg = "Do you want to save this reset report workbook to a new file?"
     style = VB_YES_NO + VB_EXCLAMATION + VB_DEFAULT_BUTTON1
     if msg_box(msg, style, title) == VB_YES:
@@ -40,6 +46,7 @@ def ResetReport(app: Any, workbook: Any) -> None:
             saveasname = f"New_{workbook.Name}"
         Module4.mysavefile(app, workbook, saveasname)
 
+    # Increment the quarter/year and carry forward balances when needed.
     app.StatusBar = "Resetting..."
     if workbook.Sheets("Contents").Range("C12").Value == 4:
         workbook.Sheets("Contents").Range("C11") = workbook.Sheets("Contents").Range("C11").Value + 1
@@ -51,10 +58,12 @@ def ResetReport(app: Any, workbook: Any) -> None:
         workbook.Sheets("Contents").Range("C12").Value == 1
         or workbook.Sheets("Contents").Range("C12").Value == "Sequential"
     ):
+        # Carry forward balances for new-year or sequential reporting.
         workbook.Sheets("BALANCE_3").Range("g19:g20") = workbook.Sheets("BALANCE_3").Range("h19:h20").Value
         if thisversion in {"MEDIUM", "LARGE"}:
             workbook.Sheets("BALANCE_3").Range("g31") = workbook.Sheets("BALANCE_3").Range("h31").Value
 
+    # Clear account-level fields that must be re-entered.
     app.StatusBar = "Accounts..."
     sheet = workbook.Sheets("PRIMARY_ACCOUNT_2a")
     sheet.Range("h16").ClearContents()
@@ -73,6 +82,7 @@ def ResetReport(app: Any, workbook: Any) -> None:
             sheet.Range("D25:g25").ClearContents()
 
     if workbook.Sheets("Contents").Range("C12").Value == 1 or workbook.Sheets("Contents").Range("C13").Value == "Sequential":
+        # For new-year or sequential mode, shift ending balances into starting balances.
         app.StatusBar = "Cash Assets..."
         sheet = workbook.Sheets("ASSET_DTL_5a")
         sheet.Range("c15:g18").ClearContents()
@@ -131,6 +141,7 @@ def ResetReport(app: Any, workbook: Any) -> None:
 
         Module6.ClearIncomeExpense(workbook, thisversion)
     else:
+        # For standard quarter increments, clear only ending values.
         app.StatusBar = "Cash Assets..."
         workbook.Sheets("ASSET_DTL_5a").Range("c15:g18,g24:g34,g41:g45,g53:g59").ClearContents()
         if thisversion in {"LARGE", "PAYPAL"}:

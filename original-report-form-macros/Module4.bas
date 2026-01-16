@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module4"
+'=========================================================================
+' Module: Module4 (Cleanup and visibility)
+' Purpose: Reset protections, hide/show sections, and trim unused ranges.
+' Key routines: cleanupsub, DeleteUnused, showstuff, hidestuff
+'=========================================================================
 ' common cleanup routines and hide/show routines
 '
 'Password to unhide sheets
@@ -180,7 +185,6 @@ Sub saveOO(saveasname)
 
     oDoc.storeAsURL(s & saveasname, oProp())
 End Sub
-
 
 
 

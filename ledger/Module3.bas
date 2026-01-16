@@ -1,4 +1,9 @@
 Attribute VB_Name = "Module3"
+'=========================================================================
+' Module: Module3 (Ledger protection and visibility)
+' Purpose: Toggle sheet protection, hide/show sections, and trim unused data.
+' Key routines: unprotectit, protectit, showstuff, hidestuff, DeleteUnused
+'=========================================================================
 'Password to unhide sheets
 Const pWord = "KCoE"
 Dim keepOff As Boolean
@@ -133,7 +138,6 @@ End Sub
 Function doProtect()
     doProtect = keepOff
 End Function
-
 
 
 
