@@ -95,32 +95,33 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
     str_path = ledgername.split(split_char)
     ledgername = str_path[-1]
 
-    workbooks(ledgername).Activate()
+    ledger_wb = workbooks(ledgername)
+    ledger_wb.Activate()
     badledger = False
 
-    ledger_vers = workbook.Sheets("Contents").Range("F46").Value.split(" ")
+    ledger_vers = ledger_wb.Sheets("Contents").Range("F46").Value.split(" ")
     if ledger_vers[-1].startswith("3"):
         lq1 = "Ledger_Q1"
         lq2 = "Ledger_Q2"
         lq3 = "Ledger_Q3"
         lq4 = "Ledger_Q4"
     else:
-        workbooks(ledgername).Close()
+        ledger_wb.Close()
         workbooks(reportname).Activate()
         msg_box("Please convert your source Ledger to version 3 to enable Import.", VB_OK_ONLY, "")
         return
 
-    workbook.Sheets("Contents").Select()
-    workbook.Unprotect(LPWORD)
-    workbook.Sheets("Summary").Visible = True
-    workbook.Sheets(lq1).Visible = True
-    workbook.Sheets(lq2).Visible = True
-    workbook.Sheets(lq3).Visible = True
-    workbook.Sheets(lq4).Visible = True
-    workbook.Protect(LPWORD)
+    ledger_wb.Sheets("Contents").Select()
+    ledger_wb.Unprotect(LPWORD)
+    ledger_wb.Sheets("Summary").Visible = True
+    ledger_wb.Sheets(lq1).Visible = True
+    ledger_wb.Sheets(lq2).Visible = True
+    ledger_wb.Sheets(lq3).Visible = True
+    ledger_wb.Sheets(lq4).Visible = True
+    ledger_wb.Protect(LPWORD)
 
     app.StatusBar = f"Unlocking {ledgername}"
-    for sheet in workbooks(ledgername).Worksheets:
+    for sheet in ledger_wb.Worksheets:
         sheet.Unprotect(LPWORD)
 
     if (
@@ -140,9 +141,9 @@ def importfromledger(app: Any, workbook: Any, workbooks: Any) -> None:
             ):
                 badledger = True
                 msg_box("Year does not match. Ending...", VB_OK_ONLY, "")
-        if not badledger and workbooks(ledgername).Sheets("Contents").Range("C6") == report_sub and report_sub == "Corporate":
+        if not badledger and ledger_wb.Sheets("Contents").Range("C6") == report_sub and report_sub == "Corporate":
             pass
-        elif not badledger and report_sub == workbooks(ledgername).Sheets("Contents").Range("C6"):
+        elif not badledger and report_sub == ledger_wb.Sheets("Contents").Range("C6"):
             pass
         else:
             badledger = True
